@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "Pre-commit : début du formatage avec php-cs-fixer"
+
+# Vérification de la présence de l'exécutable dans le PATH
+HAS_PHP_CS_FIXER=$(which php-cs-fixer)
+if [ ! $HAS_PHP_CS_FIXER  ]; then
+    echo "Impossible de trouver php-cs-fixer dans le PATH. Merci de l'installer globalement, voir :"
+    echo "  https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/blob/master/doc/installation.rst"
+    exit 1
+fi
+
+php-cs-fixer fix
+git add ./src
+exit 0
+

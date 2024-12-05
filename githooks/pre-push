@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "Pre-push : début des tests unitaires"
+
+# Vérification de la présence de composer dans le PATH
+HAS_PHP_CS_FIXER=$(which composer)
+if [ ! $HAS_PHP_CS_FIXER  ]; then
+    echo "Impossible de trouver composer dans le PATH. Merci de l'installer globalement, voir :"
+    echo "  https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/blob/master/doc/installation.rst"
+    exit 1
+fi
+
+composer test
