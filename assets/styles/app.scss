@@ -1,6 +1,11 @@
 @use 'sass:color';
 
 $bgcolor: #222222;
+$checkmark: "✅";
+
+.sass::before{
+    content: "❌ ";
+}
 
 body {
     background-color: $bgcolor;
@@ -11,6 +16,6 @@ body {
     }
 
     .sass::before{
-        content: "✅ ";
+        content: $checkmark;
     }
 }
