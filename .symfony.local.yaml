@@ -1,0 +1,7 @@
+workers:
+    # built-in command that run npm dev server to compile assets and hot reload
+    npm_dev_server:
+        cmd: ['npm', 'run', 'dev-server']
+
+    # auto start Docker compose when starting server (available since Symfony CLI 5.7.0)
+    docker_compose: ~
