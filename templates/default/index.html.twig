@@ -4,5 +4,10 @@
 
 {% block body %}
     <h1>Hello World!</h1>
+    <ul>
+    <li>✅ Server</li>
+    <li>{{ db_test ? '✅': '❌' }} Database</li>
+    <li class="sass">SASS</li>
+    </ul>
 </div>
 {% endblock %}
