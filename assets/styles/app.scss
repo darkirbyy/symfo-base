@@ -1,0 +1,12 @@
+@use 'sass:color';
+
+$bgcolor: #222222;
+
+body {
+    background-color: $bgcolor;
+    color: white;
+
+    h1 {
+        color: color.adjust($bgcolor, $lightness: 50%, $alpha: 1.0)
+    }
+}
