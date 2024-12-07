@@ -1,14 +1,12 @@
 <?php
 
-$finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__.'/src')
-;
+declare(strict_types=1);
 
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
         '@Symfony' => true,
     ])
-    ->setFinder($finder)
+    ->setCacheFile("var/cache/linter/.php-cs-fixer.cache")
     ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
 ;

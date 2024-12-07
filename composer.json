@@ -84,7 +84,17 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test": "./bin/phpunit"
+        "tests-unit": "./bin/phpunit",
+        "tests-all": ["@tests-unit"],
+        "pretty-twig": "npx prettier --write \"templates/**/*.twig\" --config linter/.prettierrc.json",
+        "pretty-scss": "npx prettier --write \"assets/styles/**/*.scss\" --config linter/.prettierrc.json",
+        "pretty-js": "npx prettier --write \"assets/controllers/**/*.js\" --config linter/.prettierrc.json",
+        "pretty-all": ["@pretty-twig", "@pretty-scss",  "@pretty-js"],
+        "lint-php": "vendor/bin/php-cs-fixer fix --config=linter/.php-cs-fixer.dist.php ./src ./tests",
+        "lint-twig": "vendor/bin/twig-cs-fixer lint --fix --config=linter/.twig-cs-fixer.dist.php ./templates ",
+        "lint-scss": "npx stylelint \"assets/styles/**/*.scss\" --fix --cache --cacheLocation var/cache/linter/ --config linter/.stylelint.config.json",
+        "lint-js": "npx eslint \"assets/controllers/**/*.js\" --fix --cache --cache-location var/cache/linter/ --config linter/.eslint.config.mjs",
+        "lint-all": ["@lint-php", "@lint-twig", "@lint-scss",  "@lint-js"]
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -96,6 +106,7 @@
         }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.65",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
@@ -103,6 +114,7 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^7.1",
         "symfony/stopwatch": "7.1.*",
-        "symfony/web-profiler-bundle": "7.1.*"
+        "symfony/web-profiler-bundle": "7.1.*",
+        "vincentlanglet/twig-cs-fixer": "^3.4"
     }
 }
