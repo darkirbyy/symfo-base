@@ -9,7 +9,7 @@
   "plugins": ["@zackad/prettier-plugin-twig", "@prettier/plugin-php"],
   "overrides": [
     {
-      "files": ["../src/**/*.php", "../test/**/*.php"],
+      "files": ["../src/**/*.php", "../tests/**/*.php"],
       "options": {
         "parser": "php",
         "tabWidth": 4,

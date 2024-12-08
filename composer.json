@@ -84,18 +84,16 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "tests-unit": "./bin/phpunit",
-        "tests-all": ["@tests-unit"],
-        "pretty-php": "npm run pretty-file \"src/**/*.php\" \"tests/**/*.php\"",
-        "pretty-twig": "npm run pretty-file \"templates/**/*.twig\"",
-        "pretty-scss": "npm run pretty-file \"assets/styles/**/*.scss\"",
-        "pretty-js": "npm run pretty-file \"assets/controllers/**/*.js\"",
-        "pretty-all": ["@pretty-php", "@pretty-twig", "@pretty-scss",  "@pretty-js"],
+        "pretty-all": "npm run pretty-file \"src/**/*.php\" \"tests/**/*.php\" \"templates/**/*.twig\" \"assets/styles/**/*.scss\" \"assets/controllers/**/*.js\"",
+
         "lint-php": "vendor/bin/php-cs-fixer fix --config=linter/.php-cs-fixer.dist.php",
         "lint-twig": "vendor/bin/twig-cs-fixer lint --fix --config=linter/.twig-cs-fixer.dist.php",
         "lint-scss": "npm run lint-scss-file \"assets/styles/**/*.scss\"",
         "lint-js": "npm run lint-js-file \"assets/controllers/**/*.js\"",
-        "lint-all": ["@lint-php", "@lint-twig", "@lint-scss",  "@lint-js"]
+        "lint-all": ["@lint-php", "@lint-twig", "@lint-scss",  "@lint-js"],
+
+        "tests-unit": "./bin/phpunit",
+        "tests-all": ["@tests-unit"]
     },
     "conflict": {
         "symfony/symfony": "*"
