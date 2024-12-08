@@ -1,8 +1,10 @@
 <?php
 
-$ruleset = new TwigCsFixer\Ruleset\Ruleset();
+$finder = (new TwigCsFixer\File\Finder())
+    ->in(__DIR__.'/../templates')
+;
 
-// You can start from a default standard
+$ruleset = new TwigCsFixer\Ruleset\Ruleset();
 $ruleset->addStandard(new TwigCsFixer\Standard\TwigCsFixer());
 
 // And then add/remove/override some rules
@@ -16,6 +18,7 @@ $ruleset->addStandard(new TwigCsFixer\Standard\TwigCsFixer());
 $config = new TwigCsFixer\Config\Config();
 $config->setRuleset($ruleset)
        ->setCacheFile("var/cache/linter/.twig-cs-fixer.cache")
+       ->setFinder($finder)
 ;
 
 return $config;

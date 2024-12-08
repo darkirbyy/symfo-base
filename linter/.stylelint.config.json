@@ -1,7 +1,5 @@
 {
     "extends": ["stylelint-config-standard", "stylelint-config-prettier-scss"],
-    "cache": ".stylelint.cache",
-    "cacheLocation": "linter/",
     "plugins": ["stylelint-scss"],
     "rules": {
         "at-rule-no-unknown": null,

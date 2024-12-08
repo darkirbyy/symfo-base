@@ -6,8 +6,19 @@
   "trailingComma": "es5",
   "bracketSpacing": true,
   "arrowParens": "always",
-  "plugins": ["@zackad/prettier-plugin-twig"],
+  "plugins": ["@zackad/prettier-plugin-twig", "@prettier/plugin-php"],
   "overrides": [
+    {
+      "files": ["../src/**/*.php", "../test/**/*.php"],
+      "options": {
+        "parser": "php",
+        "tabWidth": 4,
+        "printWidth": 120,
+        "singleQuote": true,
+        "phpVersion": "8.0",
+        "braceStyle": "psr-2"
+      }
+    },
     {
       "files": "../templates/**/*.twig",
       "options": {

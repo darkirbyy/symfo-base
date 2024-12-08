@@ -5,6 +5,7 @@
         "@eslint/js": "^9.16.0",
         "@hotwired/stimulus": "^3.0.0",
         "@hotwired/turbo": "^7.1.1 || ^8.0",
+        "@prettier/plugin-php": "^0.22.2",
         "@symfony/stimulus-bridge": "^3.2.0",
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
         "@symfony/webpack-encore": "^5.0.0",
@@ -31,6 +32,9 @@
     "scripts": {
         "dev-server": "encore dev-server",
         "dev-watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "lint-scss-file": "stylelint --fix --cache --cacheLocation var/cache/linter/ --config linter/.stylelint.config.json",
+        "lint-js-file": "eslint --fix --cache --cache-location var/cache/linter/ --config linter/.eslint.config.mjs",
+        "pretty-file": "prettier --write --config linter/.prettierrc.json"
     }
 }
