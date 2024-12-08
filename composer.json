@@ -84,8 +84,6 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "pretty-all": "npm run pretty-file \"src/**/*.php\" \"tests/**/*.php\" \"templates/**/*.twig\" \"assets/styles/**/*.scss\" \"assets/controllers/**/*.js\"",
-
         "lint-php": "vendor/bin/php-cs-fixer fix --config=linter/.php-cs-fixer.dist.php",
         "lint-twig": "vendor/bin/twig-cs-fixer lint --fix --config=linter/.twig-cs-fixer.dist.php",
         "lint-scss": "npm run lint-scss-file \"assets/styles/**/*.scss\"",

@@ -8,7 +8,6 @@ Template to quick start any Symfony project.
   - **Symfony**: 7.1 framework
   - **PHP**: >= 8.2 (compatible with Symfony 7.1)
   - **Composer**: >= 2.8 for dependency management
-  - **php-cs-fixer**: >= 3 for linting
   - **MariaDB**: 11.5 through docker for the database
 - Front-end:
   - **Node.js**: 18.19
@@ -17,6 +16,26 @@ Template to quick start any Symfony project.
   - **Webpack Encore**: 5.0
 - **git** and **git-flow** for source and version control
 - **GitHub** to share and deploy
+
+## Code quality
+
+**Prettier** with custom modules from `@zackad/prettier-plugin-twig` and `@prettier/plugin-php` for twig and PHP files.  
+To prettify one file:
+
+- in the console, execute `npm run pretty-file <file>`.
+- if using VSCode, install the *Prettier* extension and set the config file path to `linter/.prettierrc.json`, then use *Format Document*.
+
+To prettify all files, run `npm run pretty-all`.
+
+**Linter**:
+
+- **php-cs-fixer**: for PHP files in `src` and `tests` directories
+- **twig-cs-fixer**: for twig files in `templates` directory
+- **stylelint**: for CSS/SCSS files in `assets/styles` directory
+- **eslint**: for JS files in `assets/controllers` directory
+
+To lint all files from one type, run `composer lint-[php|twig|scss|js]`.  
+To lint all files, run `composer lint-all`.
 
 ## Install
 
@@ -29,9 +48,7 @@ After cloning the project:
 
 Start the web server along with docker and npm server with `symfony server:start`.
 
-To lint all `src` files, run `php-cs-fixer fix`.
-
 To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
 
-- linting all `src` files before commit
+- prettify and linting all staged files before commit
 - running all unit tests before push

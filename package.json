@@ -33,8 +33,9 @@
         "dev-server": "encore dev-server",
         "dev-watch": "encore dev --watch",
         "build": "encore production --progress",
+        "pretty-file": "prettier --write --config linter/.prettierrc.json",
+        "pretty-all": "npm run pretty-file \"src/**/*.php\" \"tests/**/*.php\" \"templates/**/*.twig\" \"assets/styles/**/*.scss\" \"assets/controllers/**/*.js\"",
         "lint-scss-file": "stylelint --fix --cache --cacheLocation var/cache/linter/ --config linter/.stylelint.config.json",
-        "lint-js-file": "eslint --fix --cache --cache-location var/cache/linter/ --config linter/.eslint.config.mjs",
-        "pretty-file": "prettier --write --config linter/.prettierrc.json"
+        "lint-js-file": "eslint --fix --cache --cache-location var/cache/linter/ --config linter/.eslint.config.mjs"
     }
 }
