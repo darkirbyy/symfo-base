@@ -66,4 +66,7 @@ A workflow to build and deploy the application is preconfigured. Some variables 
 
 For the moment, only the `prod` environment is available.
 
-The workflow is automatically triggered when pushing to main, or can be triggered manually.
+The workflow can be:
+
+- triggered manually int GitHub Actios
+- triggered automatically when pushing to main (uncomment the corresponding lines)

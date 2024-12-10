@@ -2,8 +2,8 @@ name: Build and Deploy
 run-name: ${{ github.actor }} has build and deploy to prod 🚀
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ jobs:
     - name: Install PHP prod dependencies
       run: composer install --no-scripts --no-interaction --no-progress --prefer-dist --no-dev --optimize-autoloader
 
-    - name: Warm up cache
+    - name: Warm up Symfony cache
       run: php bin/console cache:warmup --env=prod
 
     - name: Setup Node.js 18.x
@@ -44,17 +44,17 @@ jobs:
         node-version: 18.x
 
     # USELESS as setup-node already cache the packages ?
-    # - name: Cache node modules
-    #   id: npm-cache
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: node_modules
-    #     key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node-
+    - name: Cache npm packages
+      id: npm-cache
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
 
     - name: Install Node dependencies
-      run: npm ci
+      run: npm install
 
     - name: Build front end using Webpack Encore 
       run: npm run build
@@ -76,7 +76,6 @@ jobs:
           vendor/
           composer.json
           .env
-          .env.prod
 
   deploy:
     needs: build
