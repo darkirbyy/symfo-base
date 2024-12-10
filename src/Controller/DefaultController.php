@@ -23,4 +23,10 @@ class DefaultController extends AbstractController
             'db_test' => $db_test,
         ]);
     }
+
+    #[Route('/turbo', name: 'app_turbo')]
+    public function turbo(): Response
+    {
+        return $this->render('default/turbo.html.twig', []);
+    }
 }
