@@ -6,11 +6,11 @@ Template to quick start any Symfony project.
 
 - Back-end:
   - **Symfony**: 7.1 framework
-  - **PHP**: >= 8.2 (compatible with Symfony 7.1)
+  - **PHP**: 8.2 (compatible with Symfony 7.1)
   - **Composer**: >= 2.8 for dependency management
   - **MariaDB**: 11.5 through docker for the database
 - Front-end:
-  - **Node.js**: 18.19
+  - **Node.js**: 18.x
   - **npm**: >= 9.2 for dependency management
   - **Sass**: >= 1.82
   - **Webpack Encore**: 5.0
@@ -52,3 +52,18 @@ To use default git hooks, run `git config core.hooksPath ./githooks`. Current ho
 
 - prettify and linting all staged files before commit
 - running all unit tests before push
+
+## Deploy
+
+A workflow to build and deploy the application is preconfigured. Some variables and secrets have to been set up on GitHub:
+
+- Global parameters:
+  - variables: server address (domain name)
+  - secrets: server port for SSH connection
+- Environment parameters:
+  - variables: path where to copy the application
+  - secrets: server user and private key for SSH connection
+
+For the moment, only the `prod` environment is available.
+
+The workflow is automatically triggered when pushing to main, or can be triggered manually.
