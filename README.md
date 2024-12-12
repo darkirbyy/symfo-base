@@ -68,7 +68,8 @@ A workflow to build and deploy the application is preconfigured. Some variables 
   - variables: **PATH** where to copy the application on the server
   - secrets: server **USER** and private **KEYS** for SSH connection
 
-The workflow can be triggered manually in GitHub Actions or automatically when pushing to main branch (for prod) or to a release brach (for test).
+The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for test).  
+:warning: Automatic triggers are disabled by default, uncomment the corresponding lines in `.github/workflows/main.yml`.
 
 On the server, to correctly route the request as the app lives in a subdirectory, use this nginx location block (replacing *symfo-base* with the chosen `APP_NAME`):
 
@@ -78,7 +79,7 @@ location @symfo-base {
 }
 
 location /symfo-base/ {
-  alias /usr/share/nginx/symfo-base/public/;
+  alias /usr/share/nginx/www/symfo-base/public/;
   try_files $uri @symfo-base;
 
   location ~ ^/symfo-base/index\.php(/|$) {
@@ -90,3 +91,5 @@ location /symfo-base/ {
   }
 }
 ```
+
+:warning: On the server, don't forget to create the user and database in the RDBMS, and to create a `.env.local` file with prod/test env and corresponding database credentials.

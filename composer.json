@@ -1,4 +1,6 @@
 {
+    "name": "darkirby/symfo-base",
+    "description": "Template to quick start any Symfony project",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
