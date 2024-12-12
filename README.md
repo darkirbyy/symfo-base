@@ -37,7 +37,7 @@ To prettify all files, run `npm run pretty-all`.
 To lint all files from one type, run `composer lint-[php|twig|scss|js]`.  
 To lint all files, run `composer lint-all`.
 
-## Install
+## Install and dev
 
 After cloning the project:
 
@@ -46,14 +46,16 @@ After cloning the project:
 - Copy the `.env` file into a `.env.local` file and customize `APP_NAME`.  
 :information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.
 
-Start the php/web server along with docker and npm server with `symfony server:start -d`.
-Check the logs with `symfony server:logs`.
+Start the php/web server along with docker and npm server with `symfony server:start -d`.  
+Check the logs with `symfony server:logs`.  
 Stop all the services with `symfony server:stop`.
 
 To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
 
 - prettify and linting all staged files before commit
 - running all unit tests before push
+
+To increment the version, use `symfony console bizkit:versioning:increment`.
 
 ## Deploy
 
@@ -65,7 +67,6 @@ A workflow to build and deploy the application is preconfigured. Some variables 
 - Environment parameters (for prod and test):
   - variables: **PATH** where to copy the application on the server
   - secrets: server **USER** and private **KEYS** for SSH connection
-
 
 The workflow can be triggered manually in GitHub Actions or automatically when pushing to main branch (for prod) or to a release brach (for test).
 

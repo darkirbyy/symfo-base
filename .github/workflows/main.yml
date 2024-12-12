@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The deployment environment (test or prod)'
+        description: 'The deployment environment'
         required: true
         default: 'prod'
         type: choice
@@ -19,8 +19,11 @@ on:
           - prod
 
 jobs:
-  call-build-deploy:
+  prepare:
     runs-on: ubuntu-24.04
+    outputs:
+      environment: ${{ steps.determine-env.outputs.environment }}
+      version: ${{ steps.extract-info.outputs.version }}
     steps:
       - name: Checkout code in the runner
         uses: actions/checkout@v4
@@ -29,9 +32,9 @@ jobs:
         id: determine-env
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "::set-output name=environment::prod"
+            echo "environment=prod" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == refs/heads/release/* ]]; then
-            echo "::set-output name=environment::test"
+            echo "environment=test" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch: ${{ github.ref }}"
             exit 1
@@ -40,15 +43,16 @@ jobs:
       - name: Extract version, hash and release date
         id: extract-info
         run: |
-          version=$(awk '/symfo-base.version:/ {print $2}' config/parameters.yaml)
-          hash=$(awk '/symfo-base.hash:/ {print $2}' config/parameters.yaml)
-          release_date=$(awk '/symfo-base.release_date:/ {gsub(/'\''/, "", $2); print $2}' config/parameters.yaml)
-          echo "::set-output name=version::$version"
-          echo "::set-output name=hash::$hash"
-          echo "::set-output name=release_date::$release_date"
+          version=$(awk '/symfo-base.version:/ {print $2}' config/version.yaml)
+          hash=$(awk '/symfo-base.hash:/ {print $2}' config/version.yaml)
+          release_date=$(awk '/symfo-base.release_date:/ {gsub(/'\''/, "", $2); print $2}' config/version.yaml)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "hash=$hash" >> $GITHUB_OUTPUT
+          echo "release_date=$release_date" >> $GITHUB_OUTPUT
 
-      - name: Trigger build-deploy workflow
-        uses: ./.github/workflows/build-deploy.yml
-        with:
-          environment: ${{ steps.determine-env.outputs.environment }}
-          version: ${{ steps.extract-info.outputs.version }}
+  call-build-deploy:
+    needs: prepare
+    uses: ./.github/workflows/build-deploy.yml
+    with:
+      environment: ${{ needs.prepare.outputs.environment }}
+      version: ${{ needs.prepare.outputs.version }}
