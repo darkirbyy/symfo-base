@@ -58,15 +58,33 @@ To use default git hooks, run `git config core.hooksPath ./githooks`. Current ho
 A workflow to build and deploy the application is preconfigured. Some variables and secrets have to been set up on GitHub:
 
 - Global parameters:
-  - variables: server address (domain name)
-  - secrets: server port for SSH connection
+  - variables: server **ADDR** (domain name)
+  - secrets: server **PORT** for SSH connection
 - Environment parameters:
-  - variables: path where to copy the application
-  - secrets: server user and private key for SSH connection
+  - variables: **PATH** where to copy the application on the server
+  - secrets: server **USER** and private **KEYS** for SSH connection
 
 For the moment, only the `prod` environment is available.
 
-The workflow can be:
+The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (un-comment the corresponding lines in `build-deploy.yml`).
 
-- triggered manually int GitHub Actios
-- triggered automatically when pushing to main (uncomment the corresponding lines)
+On the server, to correctly route the request if the app lives in a subdirectory, use this nginx location block (replacing *symfo-base* with the chosen `APP_NAME`):
+
+```ini
+location @symfo-base {
+  rewrite ^/symfo-base/(.*)$ /symfo-base/index.php/$1 last;
+}
+
+location /symfo-base/ {
+  alias /usr/share/nginx/symfo-base/public/;
+  try_files $uri @symfo-base;
+
+  location ~ ^/symfo-base/index\.php(/|$) {
+    fastcgi_split_path_info ^(/symfo-base/index\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+    fastcgi_pass php-fpm:9000;
+    internal;
+  }
+}
+```

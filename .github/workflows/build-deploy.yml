@@ -104,7 +104,8 @@ jobs:
         REMOTE_PORT: ${{ secrets.BAAL_PORT }}
         TARGET: ${{ vars.BAAL_PATH }}
         SCRIPT_BEFORE: |
-          mkdir -p  ${{ vars.BAAL_PATH }}
+          mkdir -p ${{ vars.BAAL_PATH }}
         SCRIPT_AFTER: |
+          chmod 775 ${{ vars.BAAL_PATH }}/var
           sudo docker exec -it php-fpm migrate-app ${{ vars.BAAL_PATH }}
    
