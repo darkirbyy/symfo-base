@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractController
 {
-    #[Route('/', name: 'app_default')]
+    #[Route('/', name: 'default')]
     public function index(Connection $connection): Response
     {
         try {
@@ -24,7 +24,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('/turbo', name: 'app_turbo')]
+    #[Route('/turbo', name: 'turbo')]
     public function turbo(): Response
     {
         return $this->render('default/turbo.html.twig', []);
