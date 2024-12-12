@@ -3,5 +3,5 @@ workers:
     npm_dev_server:
         cmd: ['npm', 'run', 'dev-server']
 
-    # auto start Docker compose when starting server (available since Symfony CLI 5.7.0)
+    # start docker compose to run the local mariadb instance
     docker_compose: ~

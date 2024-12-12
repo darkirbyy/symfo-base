@@ -46,7 +46,9 @@ After cloning the project:
 - Copy the `.env` file into a `.env.local` file and customize `APP_NAME`.  
 :information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.
 
-Start the web server along with docker and npm server with `symfony server:start`.
+Start the php/web server along with docker and npm server with `symfony server:start -d`.
+Check the logs with `symfony server:logs`.
+Stop all the services with `symfony server:stop`.
 
 To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
 
