@@ -10,7 +10,7 @@ import { Controller } from '@hotwired/stimulus';
  * Delete this file or adapt it for your use!
  */
 export default class extends Controller {
-    connect() {
-        this.element.textContent = '✅ Stimulus';
-    }
+  connect() {
+    this.element.textContent = '✅ Stimulus';
+  }
 }
