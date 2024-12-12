@@ -1,21 +1,26 @@
 name: Build and Deploy
-run-name: ${{ github.actor }} has build and deploy to prod 🚀
+run-name: ${{ github.actor }} triggered "Build-Deploy" of version ${{ inputs.version }} to ${{ inputs.environment }} 🚀
 
 on:
-  # push:
-  #   branches: [ "main" ]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The deployment environment (test or prod)'
+        required: true
+        type: string
+      version:
+        description: 'The version deployed (x.x.x)'
+        required: true
+        type: string
 
 permissions:
   contents: read
-
-concurrency: one-deploy-at-a-time
 
 jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - name: Checkout files in the runner
+    - name: Checkout code in the runner
       uses: actions/checkout@v4
 
     - name: Setup PHP 8.2
@@ -32,11 +37,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
-    - name: Install PHP prod dependencies
+    - name: Install PHP dependencies
       run: composer install --no-scripts --no-interaction --no-progress --prefer-dist --no-dev --optimize-autoloader
 
     - name: Warm up Symfony cache
-      run: php bin/console cache:warmup --env=prod
+      run: php bin/console cache:warmup --env=${{ inputs.environment }}
 
     - name: Setup Node.js 18.x
       uses: actions/setup-node@v4
@@ -62,7 +67,7 @@ jobs:
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
-        name: build
+        name: build-${{ inputs.version }}
         include-hidden-files: true
         path: |
           bin/
@@ -76,11 +81,12 @@ jobs:
           vendor/
           composer.json
           .env
+          .env.${{ inputs.environment }}
 
   deploy:
     needs: build
     runs-on: ubuntu-24.04
-    environment: prod
+    environment: ${{ inputs.environment }}
     steps:
     - name: Setup WARP to enable IPv6
       uses: fscarmen/warp-on-actions@v1.2
@@ -90,10 +96,10 @@ jobs:
     - name: Download build
       uses: actions/download-artifact@v4
       with:
-        name: build
+        name: build-${{ inputs.version }}
         path: build
 
-    - name: Deploy to prod environment on BAAL
+    - name: Deploy on BAAL
       uses: easingthemes/ssh-deploy@main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.BAAL_KEYS }}

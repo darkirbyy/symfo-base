@@ -62,15 +62,14 @@ A workflow to build and deploy the application is preconfigured. Some variables 
 - Global parameters:
   - variables: server **ADDR** (domain name)
   - secrets: server **PORT** for SSH connection
-- Environment parameters:
+- Environment parameters (for prod and test):
   - variables: **PATH** where to copy the application on the server
   - secrets: server **USER** and private **KEYS** for SSH connection
 
-For the moment, only the `prod` environment is available.
 
-The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (un-comment the corresponding lines in `build-deploy.yml`).
+The workflow can be triggered manually in GitHub Actions or automatically when pushing to main branch (for prod) or to a release brach (for test).
 
-On the server, to correctly route the request if the app lives in a subdirectory, use this nginx location block (replacing *symfo-base* with the chosen `APP_NAME`):
+On the server, to correctly route the request as the app lives in a subdirectory, use this nginx location block (replacing *symfo-base* with the chosen `APP_NAME`):
 
 ```ini
 location @symfo-base {

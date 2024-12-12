@@ -31,7 +31,7 @@ bizkit_versioning:
         tagging_mode: ask
 
         # Tag message format, where '%s' is a placeholder for the version number.
-        tag_message: 'Update %env(APP_NAME)% version to %s'
+        tag_message: 'Update to version %s'
 
         # Commit message format, where '%s' is a placeholder for the version number.
-        commit_message: 'Update %env(APP_NAME)% version to %s'
+        commit_message: 'Update to version %s'
