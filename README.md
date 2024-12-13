@@ -2,6 +2,73 @@
 
 Template to quick start any Symfony project.
 
+## Initialize (to remove!)
+
+### Local side
+
+After creating the project from the template and cloning it for **the first time**:
+
+- Replace all occurrences of `symfo-base` with the new app name with:
+
+  ```sh
+  find . -type f -exec sed -i 's/symfo-base/<new-app-name>/g' {} +
+  ```
+
+- Customize the project name and description in the `README` and `composer.json`, and remove this **Initialize** part from `README`.
+- Uncomment the desired lines in `.github/workflows/main.yml` to enable the workflow.
+- Use git to add, commit and tag this first version with (:warning: don't push yet):
+
+  ```sh
+  git add . && git commit -m "Update to version 0.1.0" && git tag -a "0.1.0" -m "Update to version 0.1.0"
+  ```
+
+- Initialize `git flow init` or manually create a `develop` branch.  
+
+### GitHub side
+
+Some variables and secrets have to been set up:
+
+- Global parameters:
+  - variables: **SERV_ADDR** (domain name)
+  - secrets: **SERV_PORT** for SSH connection
+- Create two environments (test and prod) and these parameters in each on of them:
+  - variables: **SERV_PATH** where to copy the application on the server
+  - secrets: **SERV_USER** and private **SERV_KEYS** for SSH connection
+
+Push the project on `main`/`develop` or both branches to build the application and send it to the server.
+
+### Server side
+
+For each selected environment:
+
+- Create the user and database in MariaDB.
+- In the project root, create a `.env.local` file, customizing the `APP_ENV` and `DATABASE_URL` variables. Also check that the `var` directory has been created, otherwise run `mkdir var && chmod 775 var`.
+- To correctly route the requests to the application if it lives in a sub-directory, use this nginx location block:
+
+  ```ini
+  location /symfo-base {
+    return 301 /symfo-base/;
+    access_log off; 
+  }
+
+  location @symfo-base {
+    rewrite ^/symfo-base/(.*)$ /symfo-base/index.php/$1 last;
+  }
+
+  location /symfo-base/ {
+    alias /usr/share/nginx/www/symfo-base/public/;
+    try_files $uri @symfo-base;
+
+    location ~ ^/symfo-base/index\.php(/|$) {
+      fastcgi_split_path_info ^(/symfo-base/index\.php)(/.*)$;
+      include fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+      fastcgi_pass php-fpm:9000;
+      internal;
+    }
+  }
+  ```
+
 ## Prerequisite
 
 - Back-end:
@@ -14,7 +81,7 @@ Template to quick start any Symfony project.
   - **npm**: >= 9.2 for dependency management
   - **Sass**: >= 1.82
   - **Webpack Encore**: 5.0
-- **git** and **git-flow** for source and version control
+- **git** for source and version control
 - **GitHub** to share and deploy
 
 ## Code quality
@@ -37,59 +104,29 @@ To prettify all files, run `npm run pretty-all`.
 To lint all files from one type, run `composer lint-[php|twig|scss|js]`.  
 To lint all files, run `composer lint-all`.
 
-## Install and dev
+## Install
 
-After cloning the project:
+After this first install or cloning the existing project:
 
-- Install the dependencies with `composer install` and `npm install`.
-- Copy the `.env.dev` file into a `.env.dev.local` file and customize the values.  
-- Copy the `.env` file into a `.env.local` file and customize `APP_NAME`.  
-:information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.
-
-Start the php/web server along with docker and npm server with `symfony server:start -d`.  
-Check the logs with `symfony server:logs`.  
-Stop all the services with `symfony server:stop`.
+- install the dependencies with `composer install` and `npm install`.
+- copy the `.env.dev` file into a `.env.dev.local` file and customize the values.  
+:information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.  
 
 To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
 
 - prettify and linting all staged files before commit
 - running all unit tests before push
 
+## Dev
+
+Start the php/web server along with docker and npm server with `symfony server:start -d`.  
+Check the logs with `symfony server:logs`.  
+Stop all the services with `symfony server:stop`.
+
 To increment the version, use `symfony console bizkit:versioning:increment`.
 
 ## Deploy
 
-A workflow to build and deploy the application is preconfigured. Some variables and secrets have to been set up on GitHub:
-
-- Global parameters:
-  - variables: server **ADDR** (domain name)
-  - secrets: server **PORT** for SSH connection
-- Environment parameters (for prod and test):
-  - variables: **PATH** where to copy the application on the server
-  - secrets: server **USER** and private **KEYS** for SSH connection
-
+A workflow to build and deploy the application is preconfigured.  
 The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for test).  
-:warning: Automatic triggers are disabled by default, uncomment the corresponding lines in `.github/workflows/main.yml`.
-
-On the server, to correctly route the request as the app lives in a subdirectory, use this nginx location block (replacing *symfo-base* with the chosen `APP_NAME`):
-
-```ini
-location @symfo-base {
-  rewrite ^/symfo-base/(.*)$ /symfo-base/index.php/$1 last;
-}
-
-location /symfo-base/ {
-  alias /usr/share/nginx/www/symfo-base/public/;
-  try_files $uri @symfo-base;
-
-  location ~ ^/symfo-base/index\.php(/|$) {
-    fastcgi_split_path_info ^(/symfo-base/index\.php)(/.*)$;
-    include fastcgi_params;
-    fastcgi_param SCRIPT_FILENAME $document_root/index.php;
-    fastcgi_pass php-fpm:9000;
-    internal;
-  }
-}
-```
-
-:warning: On the server, don't forget to create the user and database in the RDBMS, and to create a `.env.local` file with prod/test env and corresponding database credentials.
+:warning: Some triggers may not be available depending on the project.
