@@ -1,5 +1,5 @@
 name: Main Workflow
-run-name: ${{ github.actor }} triggered "Buil and Deploy" 🚀
+run-name: ${{ github.actor }} triggered "Build and Deploy" 🚀
 
 on:
   # push:

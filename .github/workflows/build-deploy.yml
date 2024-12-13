@@ -98,17 +98,17 @@ jobs:
     - name: Deploy on server
       uses: easingthemes/ssh-deploy@main
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.BAAL_KEYS }}
-        ARGS: "--recursive --delete --exclude={'var/','.env.local','.env.*.local'} --links --owner --group --perms --compress --checksum --verbose"
+        SSH_PRIVATE_KEY: ${{ secrets.SERV_KEYS }}
+        ARGS: "--recursive --delete --links --owner --group --perms --compress --checksum --verbose"
         EXCLUDE: "/var/, /.env.local, /.env.${{ inputs.environment }}.local"
         SOURCE: "build/"
-        REMOTE_HOST: ${{ vars.BAAL_ADDR }}
-        REMOTE_USER: ${{ secrets.BAAL_USER }}
-        REMOTE_PORT: ${{ secrets.BAAL_PORT }}
-        TARGET: ${{ vars.BAAL_PATH }}
+        REMOTE_HOST: ${{ vars.SERV_ADDR }}
+        REMOTE_USER: ${{ secrets.SERV_USER }}
+        REMOTE_PORT: ${{ secrets.SERV_PORT }}
+        TARGET: ${{ vars.SERV_PATH }}
         SCRIPT_BEFORE: |
-          mkdir -p ${{ vars.BAAL_PATH }}
+          mkdir -p ${{ vars.SERV_PATH }}
         SCRIPT_AFTER: |
-          mkdir ${{ vars.BAAL_PATH }}/var && chmod 775 ${{ vars.BAAL_PATH }}/var
-          sudo docker exec -it php-fpm migrate-app ${{ vars.BAAL_PATH }}
+          mkdir ${{ vars.SERV_PATH }}/var && chmod 775 ${{ vars.SERV_PATH }}/var
+          sudo docker exec -it php-fpm migrate-app ${{ vars.SERV_PATH }}
    
