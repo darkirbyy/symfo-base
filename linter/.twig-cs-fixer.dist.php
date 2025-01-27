@@ -7,6 +7,8 @@ $finder = (new TwigCsFixer\File\Finder())
 $ruleset = new TwigCsFixer\Ruleset\Ruleset();
 $ruleset->addStandard(new TwigCsFixer\Standard\TwigCsFixer());
 
+// $ruleset->addRule(new TwigCsFixer\Rules\File\FileExtensionRule());
+// $ruleset->removeRule(TwigCsFixer\Rules\Whitespace\EmptyLinesRule::class);
 $ruleset->overrideRule(new TwigCsFixer\Rules\Punctuation\PunctuationSpacingRule(
     ['}' => 1],
     ['{' => 1],

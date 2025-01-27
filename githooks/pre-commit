@@ -18,9 +18,7 @@ if [ ! $HAS_NPM  ]; then
     exit 1
 fi
 
-
 ALL_STAGED=$(git diff --cached --name-only --diff-filter=AM)
-
 
 # Define a helper function to pretty, lint and re-add files
 lint_and_add() {
