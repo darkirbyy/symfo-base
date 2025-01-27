@@ -31,7 +31,7 @@ Some variables and secrets have to been set up:
 - Global parameters:
   - variables: **SERV_ADDR** (domain name)
   - secrets: **SERV_PORT** for SSH connection
-- Create two environments (test and prod) and these parameters in each on of them:
+- Create two environments (stage and prod) and these parameters in each on of them:
   - variables: **SERV_PATH** where to copy the application on the server
   - secrets: **SERV_USER** and private **SERV_KEYS** for SSH connection
 
@@ -115,7 +115,7 @@ After this first install or cloning the existing project:
 To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
 
 - prettify and linting all staged files before commit
-- running all unit tests before push
+- running all tests before push
 
 ## Dev
 
@@ -128,5 +128,5 @@ To increment the version, use `symfony console bizkit:versioning:increment`.
 ## Deploy
 
 A workflow to build and deploy the application is preconfigured.  
-The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for test).  
+The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for stage).  
 :warning: Some triggers may not be available depending on the project.
