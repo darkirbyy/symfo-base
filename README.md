@@ -22,7 +22,11 @@ After creating the project from the template and cloning it for **the first time
   git add . && git commit -m "Update to version 0.1.0" && git tag -a "0.1.0" -m "Update to version 0.1.0"
   ```
 
-- Initialize `git flow init` or manually create a `develop` branch.  
+- Initialize `git flow init` or manually create a `develop` branch.
+
+- (optional) To use bootstrap and some icons, run these commands :
+  - `npm install --save-dev bootstrap bootstrap-icons @fortawesome/fontawesome-free @popperjs/core`
+  - `npm install --save-exact sass@1.77.6` if there is a bug with the SASS compiler then reload the server
 
 ### GitHub side
 
