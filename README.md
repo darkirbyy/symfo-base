@@ -88,6 +88,27 @@ For each selected environment:
 - **git** for source and version control
 - **GitHub** to share and deploy
 
+## Install
+
+After this first install or cloning the existing project:
+
+- install the dependencies with `composer install` and `npm install`.
+- copy the `.env.dev` file into a `.env.dev.local` file and customize the values.  
+:information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.  
+
+To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
+
+- prettify and linting all staged files before commit (see [Code quality](#code-quality))
+- running all tests before push
+
+## Dev
+
+Start the php/web server along with mariadb container and webpack dev-server: `symfony server:start -d`.  
+Check the logs: `symfony server:logs`.  
+Stop all the services: `symfony server:stop`.
+
+To increment the version, use `symfony console bizkit:versioning:increment`.
+
 ## Code quality
 
 **Prettier** with custom modules from `@zackad/prettier-plugin-twig` and `@prettier/plugin-php` for twig and PHP files.  
@@ -107,27 +128,6 @@ To prettify all files, run `npm run pretty-all`.
 
 To lint all files from one type, run `composer lint-[php|twig|scss|js]`.  
 To lint all files, run `composer lint-all`.
-
-## Install
-
-After this first install or cloning the existing project:
-
-- install the dependencies with `composer install` and `npm install`.
-- copy the `.env.dev` file into a `.env.dev.local` file and customize the values.  
-:information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.  
-
-To use default git hooks, run `git config core.hooksPath ./githooks`. Current hooks are
-
-- prettify and linting all staged files before commit
-- running all tests before push
-
-## Dev
-
-Start the php/web server along with docker and npm server with `symfony server:start -d`.  
-Check the logs with `symfony server:logs`.  
-Stop all the services with `symfony server:stop`.
-
-To increment the version, use `symfony console bizkit:versioning:increment`.
 
 ## Deploy
 
