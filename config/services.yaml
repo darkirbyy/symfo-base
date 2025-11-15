@@ -10,7 +10,6 @@ parameters:
 imports:
     - { resource: 'version.yaml' }
 
-
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
