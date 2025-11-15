@@ -18,6 +18,7 @@ framework:
             token_id: symfo-base/submit
 
     csrf_protection:
+        check_header: true
         stateless_token_ids:
             - symfo-base/submit
 
