@@ -2,14 +2,18 @@ services:
   database:
     image: mariadb:11.5
     container_name: ${APP_NAME}-mariadb
-    env_file: ".env.dev.local"
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=${APP_NAME}_db
+      - MARIADB_USER=${APP_NAME}_user
+      - MARIADB_PASSWORD=${APP_NAME}_password
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       timeout: 5s
       retries: 5
       start_period: 60s
     ports:
-      - "${DB_PORT}:3306"
+      - "${DATABASE_PORT:-3306}:3306"
     volumes:
       - ./docker/db-data:/var/lib/mysql:rw
     networks:
