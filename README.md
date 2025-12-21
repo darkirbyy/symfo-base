@@ -1,5 +1,8 @@
 # Symfony Template
 
+![version](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/darkirbyy/07bb4b086f8e7dea73754e73bc5c1bb2/raw/symfo-base-version.json)
+![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/darkirbyy/07bb4b086f8e7dea73754e73bc5c1bb2/raw/symfo-base-coverage.json)
+
 Template to quick start any Symfony project.
 
 ## Initialize (to remove!)
@@ -34,9 +37,9 @@ Some variables and secrets have to been set up:
 
 - Global parameters:
   - variables: **SERV_ADDR** (domain name)
-  - secrets: **SERV_PORT** for SSH connection
+  - secrets: **SERV_PORT** for SSH connection and **GIST_KEY** to update the badges information
 - Create two environments (stage and prod) and these parameters in each on of them:
-  - variables: **SERV_PATH** where to copy the application on the server
+  - variables: **SERV_PATH** where to copy the application on the server and **MIN_COVERAGE** to valid test job only if coverage if above
   - secrets: **SERV_USER** and private **SERV_KEYS** for SSH connection
 
 Push the project on `main`/`develop` or both branches to build the application and send it to the server.
@@ -137,6 +140,6 @@ To start all tests, run `composer tests-all`.
 
 ## Deploy
 
-A workflow to build and deploy the application is preconfigured.  
+A workflow to test, build and deploy the application is preconfigured.  
 The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for stage).  
 :warning: Some triggers may not be available depending on the project.
