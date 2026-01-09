@@ -80,7 +80,7 @@ For each selected environment:
 
 - Back-end:
   - **Symfony**: 7.4 framework
-  - **PHP**: 8.2 (compatible with Symfony 7.4)
+  - **PHP**: 8.4 (compatible with Symfony 7.4)
   - **Composer**: >= 2.8 for dependency management
   - **MariaDB**: 11.8 through **docker** for the database
 - Front-end:
