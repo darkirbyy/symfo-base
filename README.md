@@ -69,7 +69,7 @@ For each selected environment:
     location ~ ^/symfo-base/index\.php(/|$) {
       fastcgi_split_path_info ^(/symfo-base/index\.php)(/.*)$;
       include fastcgi_params;
-      fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+      fastcgi_param SCRIPT_FILENAME "${document_root}index.php";
       fastcgi_pass php-fpm:9000;
       internal;
     }
