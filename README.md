@@ -22,25 +22,26 @@ After creating the project from the template and cloning it for **the first time
 - Use git to add, commit and tag this first version with (:warning: don't push yet):
 
   ```sh
-  git add . && git commit -m "Update to version 0.1.0" && git tag -a "0.1.0" -m "Update to version 0.1.0"
+  git add . && git commit -m "Update to version 0.1.0" && git tag -a "v0.1.0" -m "Update to version 0.1.0"
   ```
 
 - Initialize `git flow init` or manually create a `develop` branch.
 
-- (optional) To use bootstrap and some icons, run these commands :
-  - `npm install --save-dev bootstrap bootstrap-icons @fortawesome/fontawesome-free @popperjs/core`
-  - `npm install --save-exact sass@1.77.6` if there is a bug with the SASS compiler then reload the server
+- (optional) To use bootstrap and some icons, run this command: `npm install --save-dev bootstrap bootstrap-icons @fortawesome/fontawesome-free @popperjs/core`
 
 ### GitHub side
 
 Some variables and secrets have to been set up:
 
 - Global parameters:
-  - variables: **SERV_ADDR** (domain name)
-  - secrets: **SERV_PORT** for SSH connection and **GIST_KEY** to update the badges information
-- Create two environments (stage and prod) and these parameters in each on of them:
-  - variables: **SERV_PATH** where to copy the application on the server and **MIN_COVERAGE** to valid test job only if coverage if above
-  - secrets: **SERV_USER** and private **SERV_KEYS** for SSH connection
+  - **SERV_ADDR** (secret): domaine name for SSH connection
+  - **SERV_PORT** (secret): port number for SSH connection
+  - **SERV_USER** (secret): user name for SSH connection
+  - **SERV_KEYS** (secret): private key for SSH connection
+  - **GIST_KEY** (secret): to update the badges information
+- Create two environments (stag and prod) and these parameters in each on of them:
+  - **MIN_COVERAGE** (variable): valid test job only if coverage if above
+  - **SERV_PATH** (secret): where to copy the application on the server
 
 Push the project on `main`/`develop` or both branches to build the application and send it to the server.
 
@@ -50,7 +51,7 @@ For each selected environment:
 
 - Create the user and database in MariaDB.
 - In the project root, create a `.env.local` file, customizing the `APP_ENV` and `DATABASE_URL` variables. Also check that the `var` directory has been created, otherwise run `mkdir var && chmod 775 var`.
-- To correctly route the requests to the application if it lives in a sub-directory, use this nginx location block:
+- To correctly route the requests to the application if it lives in a sub-directory, use this nginx location block, replacing **ENV** with `prod` or `stag`:
 
   ```ini
   location /symfo-base {
@@ -63,7 +64,7 @@ For each selected environment:
   }
 
   location /symfo-base/ {
-    alias /usr/share/nginx/www/symfo-base/public/;
+    alias /usr/share/nginx/ENV/symfo-base/public/;
     try_files $uri @symfo-base;
 
     location ~ ^/symfo-base/index\.php(/|$) {
@@ -141,5 +142,4 @@ To start all tests, run `composer tests-all`.
 ## Deploy
 
 A workflow to test, build and deploy the application is preconfigured.  
-The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for stage).  
-:warning: Some triggers may not be available depending on the project.
+The workflow can be triggered manually in GitHub Actions or automatically when pushing to main (for prod) or to develop (for stag).
