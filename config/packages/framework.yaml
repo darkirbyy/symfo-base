@@ -6,7 +6,7 @@ framework:
     session: 
         handler_id: null
         storage_factory_id: session.storage.factory.native
-        name: php_session
+        name: 'php_session_%app.name%'
         cookie_secure: auto
         cookie_samesite: lax
         cookie_httponly: true
@@ -15,12 +15,13 @@ framework:
 
     form:
         csrf_protection:
-            token_id: symfo-base/submit
+            token_id: submit
 
     csrf_protection:
         check_header: true
         stateless_token_ids:
-            - symfo-base/submit
+            - submit
+            - delete
 
 when@test:
     framework:
@@ -29,3 +30,10 @@ when@test:
             storage_factory_id: session.storage.factory.mock_file
         csrf_protection:
             stateless_token_ids:
+
+when@prod: &framework-prod
+    framework:
+        session:
+            cookie_path: '/%app.name%'
+
+when@stag: *framework-prod

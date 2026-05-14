@@ -29,6 +29,76 @@ After creating the project from the template and cloning it for **the first time
 
 - (optional) To use bootstrap and some icons, run this command: `npm install --save-dev bootstrap bootstrap-icons @fortawesome/fontawesome-free @popperjs/core`
 
+- (optional) If authentication is needed, configure these files then install `mainick/keycloak-client-bundle` :
+
+  ```properties
+  # .env
+  ###> mainick/keycloak-client-bundle ###
+  IAM_BASE_URL=!ChangeMe!
+  IAM_CLIENT_SECRET=!ChangeMe!
+  IAM_REDIRECT_URI=!ChangeMe!
+  IAM_ENCRYPTION_ALGORITHM=!ChangeMe!
+  IAM_ENCRYPTION_KEY=!ChangeMe!
+  IAM_VERSION=!ChangeMe!
+  ###< mainick/keycloak-client-bundle ###
+  ```
+
+  ```yaml
+  # config/packages/security.yaml
+  providers:
+    mainick_keycloak_user_provider:
+      id: Mainick\KeycloakClientBundle\Security\User\KeycloakUserProvider
+
+  firewalls:
+    ...
+    main:
+      pattern: ^/
+      lazy: true
+      provider: mainick_keycloak_user_provider
+      entry_point: Mainick\KeycloakClientBundle\Security\EntryPoint\KeycloakAuthenticationEntryPoint
+      custom_authenticator:
+        - Mainick\KeycloakClientBundle\Security\Authenticator\KeycloakAuthenticator
+      logout:
+        path: mainick_keycloak_security_auth_logout
+
+  access_control:
+    - { path: /auth/keycloak/connect, roles: PUBLIC_ACCESS }
+    ...
+  ```
+
+  ```yaml
+  # config/routes/mainick_keycloak_security.yaml
+  mainick_keycloak_security_auth_connect:
+    path:       /auth/keycloak/connect
+    controller: Mainick\KeycloakClientBundle\Controller\KeycloakController::connect
+
+  mainick_keycloak_security_auth_connect_check:
+    path:       /auth/keycloak/check
+    controller: Mainick\KeycloakClientBundle\Controller\KeycloakController::connectCheck
+
+  mainick_keycloak_security_auth_logout:
+    path:       /auth/keycloak/logout
+    controller: Mainick\KeycloakClientBundle\Controller\KeycloakController::logout
+  ```
+
+  ```yaml
+  # config/routes/mainick_keycloak_client.yaml
+  mainick_keycloak_client:
+    security:
+      default_target_route_name: ...
+    keycloak:
+      verify_ssl: true
+      realm: web
+      client_id: 'symfo-base-%app.env%'
+      client_secret: '%env(IAM_CLIENT_SECRET)%'
+      base_url: '%env(IAM_BASE_URL)%'
+      redirect_uri: '%env(IAM_REDIRECT_URI)%'
+      encryption_algorithm: '%env(IAM_ENCRYPTION_ALGORITHM)%'
+      encryption_key: '%env(IAM_ENCRYPTION_KEY)%'
+      encryption_key_path: ''
+      version: '%env(IAM_VERSION)%'
+  ```
+
 ### GitHub side
 
 Some variables and secrets have to been set up:
@@ -51,7 +121,7 @@ For each selected environment:
 
 - Create the user and database in MariaDB.
 - In the project root, create a `.env.local` file, customizing the `APP_ENV` and `DATABASE_URL` variables. Also check that the `var` directory has been created, otherwise run `mkdir var && chmod 775 var`.
-- To correctly route the requests to the application if it lives in a sub-directory, use this nginx location block, replacing **ENV** with `prod` or `stag`:
+- To correctly route the requests to the application if it lives in a sub-directory, use this nginx location block, replacing `<ENV>` with `prod` or `stag`:
 
   ```ini
   location /symfo-base {
@@ -64,7 +134,7 @@ For each selected environment:
   }
 
   location /symfo-base/ {
-    alias /usr/share/nginx/ENV/symfo-base/public/;
+    alias /usr/share/nginx/<ENV>/symfo-base/public/;
     try_files $uri @symfo-base;
 
     location ~ ^/symfo-base/index\.php(/|$) {
@@ -76,6 +146,18 @@ For each selected environment:
     }
   }
   ```
+
+### Keycloak Side
+
+(optional) If authentication is needed, create a client for each environment.
+
+- for clientId, adapt this structure : `symfo-base-<ENV>`
+- :warning: create the required roles without the ROLE_ suffix
+- on client scopes, select the dedicated one, then `Add mapper` -> `By configuration`:
+  - Client ID: choose the one set before
+  - Client Role Prefix: `ROLE_`
+  - Token Claim Name: `resource_access.${client_id}.roles`
+  - Add to userinfo: ON
 
 ## Prerequisite
 
