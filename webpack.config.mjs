@@ -1,6 +1,6 @@
-const Encore = require('@symfony/webpack-encore');
-const path = require('path');
-const dotenv = require('dotenv');
+import Encore from '@symfony/webpack-encore';
+import path from 'path';
+import dotenv from 'dotenv';
 
 dotenv.config();
 const app_name = process.env.APP_NAME || ''; // Default to an empty string if not defined
@@ -63,20 +63,14 @@ Encore
 
     // configure Babel
     // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
+    //     config.plugins.push(['polyfill-corejs3', { method: 'usage-global', version: '3.49' }]);
     // })
-
-    // enables and configure @babel/preset-env polyfills
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = '3.38';
-    })
 
     // enables Sass/SCSS support
     .enableSassLoader(function(options) {
         options.sassOptions = {
-             quietDeps: true,
-           silenceDeprecations: ['global-builtin', 'import']
+            quietDeps: true,
+            silenceDeprecations: ['global-builtin', 'import']
         };
     })
     .enablePostCssLoader((options) => {
@@ -86,6 +80,11 @@ Encore
                 autoprefixer: {}
             }
         };
+    })
+
+    // Lightning CSS, fast Rust-based minifier
+    .configureCssMinimizerPlugin((options, MinimizerPlugin) => {
+        options.minify = MinimizerPlugin.lightningCssMinify;
     })
 
     // add https support (port option useless as the manifest will not be updated accordingly)
@@ -104,7 +103,6 @@ Encore
                 pfx: path.join(process.env.HOME, '.config/symfony-cli/certs/default.p12'),
             },
         }
-        // options.port = 'auto'
     })
 
     // uncomment if you use TypeScript
@@ -121,4 +119,4 @@ Encore
     //.autoProvidejQuery()
     ;
 
-module.exports = Encore.getWebpackConfig();
+export default await Encore.getWebpackConfig();
